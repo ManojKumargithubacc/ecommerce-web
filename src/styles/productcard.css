@@ -1,0 +1,25 @@
+.Grid button {
+    border: 1px solid black;
+    border-radius: 0;
+    background-color: black;
+    color: coral;
+    width: 100px;
+    height: 30px; /* Add a semicolon here */
+    cursor: pointer; /* Add cursor pointer */
+  }
+  
+  .Grid button:hover {
+    background-color: rgb(239, 117, 73);
+    color: black;
+  }
+  
+  .Card {
+    padding: 15px;
+    margin-bottom: 15px; /* Add margin-bottom for spacing between cards */
+    transition: 0.5s ease;
+  }
+  .Card:hover {
+    transform: translateY(-7px); /* Move the card up by 5px when hovered */
+   
+  }
+  
