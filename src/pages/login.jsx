@@ -1,40 +1,46 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import Layout from "../components/layout/layout.jsx";
-import { useAuth } from "../context/auth.jsx";
+import { useAuth } from "../context/auth";
+import { loginUser } from "../services/loginService";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+
 function Login() {
   const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/login`, {
-        email,
-        password,
-      });
-      if (res && res.data.success) {
+      const res = await loginUser(email, password);
+      if (res && res.success) {
+        const { token, user } = res;
+        const userId = user._id;
+
         setAuth({
           ...auth,
-          user: res.data.user,
-          token: res.data.token,
+          user,
+          token,
         });
-        localStorage.setItem('auth',JSON.stringify(res.data))
-        navigate("/");
+
+        localStorage.setItem("auth", JSON.stringify({ user, token }));
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("token", token);
+        localStorage.setItem("email", email);
         toast.success("Logged in successfully");
-      } else {
-        toast.error("Log in Failed");
+        navigate("/");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      toast.error("Log in Failed");
     }
   };
   return (
-    <Layout>
+    <>
       <div className="register">
         <h1>Login</h1>
         <form onSubmit={handleSubmit}>
@@ -55,30 +61,41 @@ function Login() {
             />
             <div id="emailHelp" className="form-text"></div>
           </div>
+
           <div className="mb-3">
             <label htmlFor="exampleInputPassword" className="form-label">
               Password
             </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => {
-                setpassword(e.target.value);
-              }}
-              className="form-control"
-              id="exampleInputPassword"
-              placeholder="Atleast 8 characters"
-              required
-            />
+            <div className="input-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                className="form-control"
+                id="exampleInputPassword"
+                placeholder="At least 8 characters"
+                required
+              />
+              <div className="visibility-icon">
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </button>
+              </div>
+            </div>
           </div>
 
           <button type="submit" className="btn btn-primary ">
             Login
           </button>
         </form>
-        <ToastContainer />
       </div>
-    </Layout>
+    </>
   );
 }
 

@@ -1,22 +1,26 @@
 import React from "react";
-import Layout from "../components/layout/layout";
 import { Card, CardMedia } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useCart } from "../context/cart";
 import { useAuth } from "../context/auth";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setCheckout } from "../redux/checkoutredux";
 
 function CartPage() {
   const [cart, setCart] = useCart();
-  const [auth, setAuth] = useAuth();
+  const [auth] = useAuth();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const totalPrice = () => {
     try {
-      let total = 0;
-      cart?.map((product) => {
-        total = total + product.price;
+      let subTotal = 0;
+      cart?.forEach((product) => {
+        subTotal += product.price * product.quantity;
       });
-      return total.toLocaleString("en-IN", {
+      return subTotal.toLocaleString("en-IN", {
         style: "currency",
         currency: "INR",
       });
@@ -36,6 +40,7 @@ function CartPage() {
       console.log(error);
     }
   };
+
   const increaseQuantity = (productId) => {
     const updatedCart = cart.map((product) =>
       product._id === productId
@@ -60,8 +65,14 @@ function CartPage() {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
+  const handleCheckout = () => {
+    dispatch(setCheckout(true));
+    setCart([]);
+    navigate("/dashboard");
+  };
+
   return (
-    <Layout>
+    <>
       <div className="container">
         <div className="row">
           <div className="col-md-12">
@@ -69,9 +80,7 @@ function CartPage() {
               {`Hi!! ${auth?.token && auth?.user?.name}`}
             </h1>
             <h4 className="text-center">
-              {cart?.length
-                ? 'Welcome to your cart'
-                : "Your cart is Empty"}
+              {cart?.length ? "Welcome to your cart" : "Your cart is Empty"}
             </h4>
           </div>
         </div>
@@ -86,12 +95,12 @@ function CartPage() {
                       component="img"
                       height="200"
                       image={product.image}
-                      alt={product.subcategory}
+                      alt={product.name}
                     />
                   </Card>
                 </div>
                 <div className="col-md-8">
-                  <h4>{product.subcategory}</h4>
+                  <h4>{product.name}</h4>
                   <p>{product.description}</p>
                   <h6>Price: ₹ {product.price}</h6>
                   <div className="quantity-control">
@@ -107,21 +116,19 @@ function CartPage() {
                       <button
                         className="btn btn-light"
                         onClick={() => {
-                          // Decrease quantity
                           decreaseQuantity(product._id);
                         }}
                       >
-                        <RemoveIcon />
+                        <RemoveIcon fontSize="small" />
                       </button>
                       <span>{product.quantity}</span>
                       <button
                         className="btn btn-light"
                         onClick={() => {
-                          // Increase quantity
                           increaseQuantity(product._id);
                         }}
                       >
-                        <AddIcon />
+                        <AddIcon fontSize="small" />
                       </button>
                     </div>
                   </div>
@@ -131,14 +138,20 @@ function CartPage() {
             ))}
           </div>
           <div className="col-md-4 text-center">
-            <h2>Cart Summary</h2>
-            <p>Total | Checkout | Payment</p>
-            <hr />
-            <h4>Sub-Total : {totalPrice()}</h4>
+            {cart?.length > 0 && (
+              <>
+                <h2>Cart Summary</h2>
+                <hr />
+                <h4>Sub-Total : {totalPrice()}</h4>
+                <button className="btn btn-primary" onClick={handleCheckout}>
+                  Checkout
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
 

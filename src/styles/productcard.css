@@ -4,8 +4,8 @@
     background-color: black;
     color: coral;
     width: 100px;
-    height: 30px; /* Add a semicolon here */
-    cursor: pointer; /* Add cursor pointer */
+    height: 30px; 
+    cursor: pointer; 
   }
   
   .Grid button:hover {
@@ -15,11 +15,11 @@
   
   .Card {
     padding: 15px;
-    margin-bottom: 15px; /* Add margin-bottom for spacing between cards */
+    margin-bottom: 15px;
     transition: 0.5s ease;
   }
   .Card:hover {
-    transform: translateY(-7px); /* Move the card up by 5px when hovered */
+    transform: translateY(-7px); 
    
   }
   

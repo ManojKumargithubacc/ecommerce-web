@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { registerUser } from "../../services/authService";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
-import Layout from "../../components/layout/layout";
 
 function Register() {
   const initialState = {
@@ -27,23 +26,21 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/register`,
-        formData
-      );
-      if (res.data.success) {
-        toast.success("Account created successfully");
+      const res = await registerUser(formData);
+      if (res.success) {
         navigate("/login");
+        toast.success("Account created successfully");
       } else {
         toast.error("Account already exists");
       }
     } catch (error) {
       console.log(error);
+      toast.error("Error creating account. Please try again.");
     }
   };
 
   return (
-    <Layout>
+    <>
       <div className="register">
         <h1>Create Account</h1>
         <form onSubmit={handleSubmit}>
@@ -110,17 +107,15 @@ function Register() {
               required
             />
           </div>
-
           <button type="submit" className="btn btn-primary ">
-            Submit
+            Signup
           </button>
           <p style={{ marginTop: "10px", textAlign: "center" }}>
             Already have an account? <Link to="/login">Login</Link>
           </p>
         </form>
-        <ToastContainer />
       </div>
-    </Layout>
+    </>
   );
 }
 

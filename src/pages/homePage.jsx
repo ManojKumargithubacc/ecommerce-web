@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Card, CardContent, CardMedia, Typography } from "@mui/material";
-import axios from "axios";
-import { toast } from "react-toastify";
-import Layout from "../components/layout/layout.jsx";
-import { useAuth } from "../context/auth.jsx";
-import { useCart } from "../context/cart.jsx";
+import { toast, ToastContainer } from "react-toastify";
+import { fetchAllProducts,fetchFilteredProducts } from "../services/productService";
+import { useCart } from "../context/cart";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/productcard.css";
 import "../styles/filter.css";
@@ -22,7 +20,6 @@ function HomePage() {
   };
 
   const [state, setState] = useState(initialState);
-  const [auth, setAuth] = useAuth();
   const [cart, setCart] = useCart();
   const {
     products,
@@ -31,66 +28,53 @@ function HomePage() {
     subcategories,
     selectedSubcategory,
     filteredProducts,
-    cartItems,
   } = state;
+
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_BASE_URL}/products`
-        );
+        const data = await fetchAllProducts();
         setState((prevState) => ({
           ...prevState,
-          products: response.data[0],
-          categories: [
-            ...new Set(response.data[0].map((product) => product.category)),
-          ],
+          products: data,
+          categories: [...new Set(data.map((product) => product.category))],
+          subcategories: [...new Set(data.map((product) => product.subcategory))],
         }));
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.log('Error:',error)
       }
     };
-    fetchProducts();
+    fetchData();
   }, []);
 
   useEffect(() => {
-    const filteredProductsByCategory = selectedCategory
-      ? products.filter((product) => product.category === selectedCategory)
-      : [];
-    setState((prevState) => ({
-      ...prevState,
-      filteredProducts: filteredProductsByCategory,
-      subcategories: [
-        ...new Set(
-          filteredProductsByCategory.map((product) => product.subcategory)
-        ),
-      ],
-      selectedSubcategory: "",
-    }));
-  }, [selectedCategory, products]);
-
-  useEffect(() => {
-    let updatedFilteredProducts = products;
-    if (selectedCategory) {
-      updatedFilteredProducts = updatedFilteredProducts.filter(
-        (product) => product.category === selectedCategory
-      );
-    }
-    if (selectedSubcategory) {
-      updatedFilteredProducts = updatedFilteredProducts.filter(
-        (product) => product.subcategory === selectedSubcategory
-      );
-    }
-    setState((prevState) => ({
-      ...prevState,
-      filteredProducts: updatedFilteredProducts,
-    }));
-  }, [selectedSubcategory, selectedCategory, products]);
+    const fetchData = async () => {
+      try {
+        const data = await fetchFilteredProducts(selectedCategory, selectedSubcategory);
+        setState((prevState) => ({
+          ...prevState,
+          filteredProducts: data,
+        }));
+      } catch (error) {
+        console.log('Error:',error)
+      }
+    };
+    fetchData();
+  }, [selectedCategory, selectedSubcategory]);
 
   const handleCategoryChange = (e) => {
+    const selectedCategory = e.target.value;
     setState((prevState) => ({
       ...prevState,
-      selectedCategory: e.target.value,
+      selectedCategory,
+      selectedSubcategory: "",
+      subcategories: selectedCategory
+        ? [...new Set(
+            state.products
+              .filter((product) => product.category === selectedCategory)
+              .map((product) => product.subcategory)
+          )]
+        : [],
     }));
   };
 
@@ -111,22 +95,85 @@ function HomePage() {
       );
       setCart(updatedCart);
       localStorage.setItem("cart", JSON.stringify(updatedCart));
-      toast.success(`${product.subcategory} quantity increased!`, {
+      toast.success(`${product.name} quantity increased!`, {
         position: "top-right",
       });
     } else {
       const newProduct = { ...product, quantity: 1 };
       setCart([...cart, newProduct]);
       localStorage.setItem("cart", JSON.stringify([...cart, newProduct]));
-      toast.success(`${product.subcategory} added to cart!`, {
+      toast.success(`${product.name} added to cart!`, {
         position: "top-right",
       });
     }
   };
   return (
-    <Layout>
-      <div className="center-container">
-        <div className="categories">
+    <>
+      <div className="home">
+        <div
+          id="carouselExampleInterval"
+          className="carousel slide"
+          data-bs-ride="carousel"
+        >
+          <div className="carousel-inner">
+            <div
+              className="carousel-item active"
+              data-bs-interval={1000}
+              style={{ maxHeight: "250px" }}
+            >
+              <img
+                src="https://rukminim2.flixcart.com/fk-p-flap/1600/270/image/c2fc3a5669255ab4.jpg?q=20"
+                className="d-block w-100"
+                alt="..."
+              />
+            </div>
+            <div
+              className="carousel-item"
+              data-bs-interval={2000}
+              style={{ maxHeight: "270px" }}
+            >
+              <img
+                src="https://rukminim2.flixcart.com/fk-p-flap/1600/270/image/c2cfdd9906968a62.png?q=20"
+                className="d-block w-100 "
+                alt="..."
+              />
+            </div>
+            <div className="carousel-item" style={{ maxHeight: "270px" }}>
+              <img
+                src="https://rukminim2.flixcart.com/fk-p-flap/1600/270/image/5483df11b3fc9f0b.jpg?q=20"
+                className="d-block w-100"
+                alt="..."
+              />
+            </div>
+          </div>
+          <button
+            className="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleInterval"
+            data-bs-slide="prev"
+          >
+            <span className="carousel-control-prev-icon" aria-hidden="true" />
+            <span className="visually-hidden">Previous</span>
+          </button>
+          <button
+            className="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleInterval"
+            data-bs-slide="next"
+          >
+            <span className="carousel-control-next-icon" aria-hidden="true" />
+            <span className="visually-hidden">Next</span>
+          </button>
+        </div>
+
+        <div
+          className="categories"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+          }}
+        >
           <select
             id="category"
             onChange={handleCategoryChange}
@@ -134,82 +181,78 @@ function HomePage() {
           >
             <option>Available categories</option>
             {categories.map((category, index) => (
-              <option id="catgory-option" key={index} value={category}>
+              <option id="category-option" key={index} value={category}>
                 {category}
               </option>
             ))}
           </select>
         </div>
-        {selectedCategory && (
-          <div className="categories">
-            <select
-              id="subcategory"
-              onChange={handleSubcategoryChange}
-              value={selectedSubcategory}
-            >
-              <option>Available subcategories</option>
-              {subcategories.map((subcategory, index) => (
-                <option key={index} value={subcategory}>
-                  {subcategory}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
       </div>
-      <div className="Grid">
-        <Grid container spacing={2}>
-          {filteredProducts.map((product) => (
-            <Grid item key={product._id} xs={12} sm={6} md={4}>
-              <div className="Card">
-                <Card>
-                  <CardMedia
-                    style={{ objectFit: "contain" }}
-                    component="img"
-                    height="200"
-                    image={product.image}
-                    alt={product.name}
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h4" component="div">
-                      {product.subcategory}
-                    </Typography>
-                    <Typography variant="body2">
-                      Price: ₹{product.price}
-                    </Typography>
-                    <Typography variant="body2">
-                      Description: {product.description}
-                    </Typography>
-                    <div className="addtocart">
-                      <Typography variant="body2">
-                        <button
-                          // onClick={() => {
-                          //   setCart([...cart, product]);
-                          //   localStorage.setItem(
-                          //     "cart",
-                          //     JSON.stringify([...cart, product])
-                          //   );
-                          //   toast.success(
-                          //     `${product.subcategory} added to cart!`,
-                          //     {
-                          //       position: "top-right",
-                          //     }
-                          //   );
-                          // }}
-                          onClick={() => handleAddToCart(product)}
-                        >
-                          ADD <i className="fa fa-shopping-cart"></i>
-                        </button>
+      {selectedCategory && (
+        <div
+          className="categories"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+          }}
+        >
+          <select
+            id="subcategory"
+            onChange={handleSubcategoryChange}
+            value={selectedSubcategory}
+          >
+            <option>Available subcategories</option>
+            {subcategories.map((subcategory, index) => (
+              <option key={index} value={subcategory}>
+                {subcategory}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+        <div className="Grid">
+          <Grid container spacing={2}>
+            {(selectedCategory && filteredProducts.length > 0
+              ? filteredProducts
+              : products
+            ).map((product) => (
+              <Grid item key={product._id} xs={12} sm={6} md={4}>
+                <div className="Card">
+                  <Card>
+                    <CardMedia
+                      style={{ objectFit: "contain" }}
+                      component="img"
+                      height="200"
+                      image={product.image}
+                      alt={product.name}
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h4" component="div">
+                        {product.name}
                       </Typography>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </Grid>
-          ))}
-        </Grid>
-      </div>
-    </Layout>
+                      <Typography variant="body2">
+                        Price: ₹{product.price}
+                      </Typography>
+                      <Typography variant="body2">
+                        Description: {product.description}
+                      </Typography>
+                      <div className="addtocart">
+                        <Typography variant="body2">
+                          <button onClick={() => handleAddToCart(product)}>
+                            ADD <i className="fa fa-shopping-cart"></i>
+                          </button>
+                        </Typography>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </Grid>
+            ))}
+          </Grid>
+        </div>
+      <ToastContainer/>
+    </>
   );
 }
 

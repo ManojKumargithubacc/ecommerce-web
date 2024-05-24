@@ -1,96 +1,98 @@
 * {
-    margin: 0;
-    padding:0;
-    box-sizing: border-box;
+  padding: 0;
+  box-sizing: border-box;
 }
-.navbar{
-    font-family:"Poppins", sans-serif ;
-    font-size: 17px;
-    line-height: 25px;
-    text-transform: uppercase;
-    box-shadow: 0 8px 6px -6px rgb(242, 138, 74);
-    border-bottom: 0px solid rgb(234, 136, 88) !important;
+.navbar {
+  font-family: "Poppins", sans-serif;
+  font-size: 17px;
+  line-height: 25px;
+  width: 100%;
+  text-transform: uppercase;
+  box-shadow: 0 8px 6px -6px rgb(242, 138, 74);
+  border-bottom: 0px solid rgb(234, 136, 88) !important;
+  top: 0;
+  position: fixed;
+  z-index: 5;
 }
-.nav-link{
-    font-weight: 550 !important;
+.nav-link {
+  font-weight: 550 !important;
 }
-.nav-link:hover{
-    color:coral;
+.nav-link:hover {
+  color: coral;
 }
-.active{
-    border-bottom: 2px solid rgb(252, 85, 2);
-    border-width: 3px;
+.active {
+  border-bottom: 2px solid rgb(252, 85, 2);
+  border-width: 3px;
 }
 .dropdown-menu {
-    min-width: auto; /* Remove default minimum width */
-    padding: 0; /* Remove default padding */
-  }
-  
+  min-width: auto; /* Remove default minimum width */
+  padding: 0; /* Remove default padding */
+}
+
 .dropdown-item {
-    font-size: 14px; /* Adjust font size */
-    padding: 8px 5px; /* Adjust padding */
-  }
-  
+  font-size: 14px; /* Adjust font size */
+  padding: 8px 5px; /* Adjust padding */
+}
+
 .dropdown-menu .dropdown-item:hover {
-    background-color: #feb79b; 
+  background-color: #feb79b;
 }
-  
+
 .dropdown-menu .dropdown-item.active {
-    background-color: #f17743; 
-    color: #333; 
-    border-radius: 0; 
+  background-color: #f17743;
+  color: #333;
+  border-radius: 0;
 }
-.navbar-brand{
-    font-weight: 550;
-    font-family: 'roboto', sans-serif;
-    letter-spacing: 3px;
+.navbar-brand {
+  font-weight: 550;
+  font-family: "roboto", sans-serif;
+  letter-spacing: 3px;
 }
-.footer{
-    color: white;
-    padding: 25px;
-    background-image: linear-gradient(rgb(240, 93, 13), rgb(48, 45, 45));
+.footer {
+  color: white;
+  padding: 25px;
+  background-image: linear-gradient(rgb(240, 93, 13), rgb(48, 45, 45));
 }
-.footer a{
-    text-decoration: none;
-    color: white;
-    padding: 10px;
+.footer a {
+  text-decoration: none;
+  color: white;
+  padding: 10px;
 }
-.footer a:hover{
-    color: gray;
-    border-bottom: 1px solid gray;
+.footer a:hover {
+  color: gray;
+  border-bottom: 1px solid gray;
 }
-.register{
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    height: 80vh;
-    flex-direction: column;
+.register {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  flex-direction: column;
 }
 .register input:focus {
-    background-color: rgb(246, 168, 140);
-    
-  }
-.register form{
-    padding: 30px;
-    background-color: rgb(248, 246, 244);
-    border: 1px solid rgb(213, 206, 206);
-    box-shadow: rgb(255, 127, 80)0px 5px 15px;
+  background-color: rgb(246, 168, 140);
 }
-.register form button{
-border: 1px solid black;
-border-radius: 0;
-background-color: black;
-color: coral;
-width: 300px;
+.register form {
+  padding: 30px;
+  background-color: rgb(248, 246, 244);
+  border: 1px solid rgb(213, 206, 206);
+  box-shadow: rgb(255, 127, 80) 0px 5px 15px;
+}
+.register form button {
+  border: 1px solid black;
+  border-radius: 0;
+  background-color: black;
+  color: coral;
+  width: 300px;
 }
 
 .container-fluid form {
-    display: flex;
-    justify-content: space-between; /* Align items with space between */
-    align-items: center; /* Center vertically */
-  }
-  
-  .container-fluid form {
-    margin-right: 10px;
-    width: 50%; /* Add some margin to separate input and button */
-  }
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+}
+
+.container-fluid form {
+  margin-right: 10px;
+  width: 50%; 
+}

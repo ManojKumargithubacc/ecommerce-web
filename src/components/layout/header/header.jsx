@@ -1,25 +1,28 @@
-import { React } from "react";
+import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../../../context/auth";
 import { useCart } from "../../../context/cart";
-import { toast, ToastContainer } from "react-toastify";
 import { LuShoppingCart } from "react-icons/lu";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { FaUserCircle } from "react-icons/fa";
 import { Badge } from "antd";
+import { useSelector } from "react-redux";
 
 function Header() {
   const [auth, setAuth] = useAuth();
   const [cart] = useCart();
+  const hasCheckedOut = useSelector((state) => state.checkout.hasCheckedOut);
+
   const handleLogOut = () => {
     setAuth({
       ...auth,
       user: null,
       token: "",
     });
+   
     localStorage.removeItem("auth");
-    toast.success("Logged out Successfully");
   };
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -39,18 +42,10 @@ function Header() {
             <Link to="/" className="navbar-brand">
               <LuShoppingCart size={25} /> E-MART
             </Link>
-            <form className="d-flex" role="search">
-              <input
-                className="form-control me-2"
-                type="search"
-                placeholder="Search for products and category"
-                aria-label="Search"
-              />
-              <button className="btn btn-outline-success" type="submit">
-                Search
-              </button>
-            </form>
-            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            <ul
+              className="navbar-nav ms-auto mb-2 mb-lg-0"
+              style={{ marginRight: "10px", marginTop: "10px" }}
+            >
               <li className="nav-item">
                 <NavLink to="/" className="nav-link">
                   Home
@@ -82,10 +77,17 @@ function Header() {
                     </div>
                     <ul className="dropdown-menu">
                       <li>
-                        <NavLink to="/dashboard" className="dropdown-item">
-                          Dashboard
+                        <NavLink to="/profile" className="dropdown-item">
+                          Profile
                         </NavLink>
                       </li>
+                      {hasCheckedOut && (
+                        <li>
+                          <NavLink to="/dashboard" className="dropdown-item">
+                            Dashboard
+                          </NavLink>
+                        </li>
+                      )}
                       <li>
                         <NavLink
                           onClick={handleLogOut}
@@ -110,7 +112,6 @@ function Header() {
           </div>
         </div>
       </nav>
-      <ToastContainer />
     </>
   );
 }

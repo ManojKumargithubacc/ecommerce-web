@@ -1,34 +1,155 @@
-/* styles.css */
-
 .table-container {
-    margin-top: 20px;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #ddd;
-  }
-  
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-  
-  th {
-    background-color: #f2f2f2;
-  }
-  
-  tr:hover {
-    background-color: #f5f5f5;
-  }
-  
-  .actions {
-    display: flex;
-    gap: 5px;
-  }
-  
-  .actions button {
-    padding: 6px 12px;
-  }
-  
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #f5f5f5;
+}
+
+.actions {
+  display: flex;
+  gap: 5px;
+}
+
+.actions button {
+  padding: 6px 12px;
+}
+.center-container,
+.container,
+.register,
+.dashBoard,
+.Profile, .home {
+  margin-top: 75px;
+}
+
+.quantity .btn {
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  border: none;
+  background-color: transparent;
+  border-radius: 50%;
+}
+
+.quantity .btn:hover {
+  background-color: transparent;
+}
+
+.quantity .btn:focus {
+  outline: none;
+}
+
+.visibility-icon .btn {
+  position: absolute;
+  top: 5px;
+  left: 257px;
+  color: black;
+  z-index: 100;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  width: 50px;
+}
+.visibility-icon .btn:hover {
+  color: black;
+  border: none;
+  padding: 0;
+  width: 50px;
+}
+
+.visibility-icon .btn:active {
+  background-color: transparent;
+}
+
+.custom-spinner {
+  color: red;
+  margin-top: 100px;
+}
+
+.Profile {
+  padding: 20px;
+  max-width: 800px;
+  margin-top: 75px;
+}
+
+.user-info {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-info p {
+  margin: 10px 0;
+}
+
+.orders-section {
+  margin-top: 30px;
+}
+
+.order-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  list-style-type: none;
+  padding: 0;
+}
+
+.order-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  width: calc(60% - 30px); 
+  box-sizing: border-box;
+}
+
+.order-header,
+.order-address {
+  margin-bottom: 15px;
+}
+
+.order-header h3,
+.order-address h4 {
+  margin: 0 0 10px 0;
+}
+
+.order-items {
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.order-item p {
+  margin: 0;
+}
+
+.MdEditNote {
+  cursor: pointer;
+  color: #007bff;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
+}
