@@ -192,7 +192,7 @@ function Profile() {
                       <div className="order-items">
                         {order.items.map((item, itemIndex) => (
                           <div key={itemIndex} className="order-item">
-                            <p>Product Name: {item.name}</p>
+                            <p>Product Id: {item.productId}</p>
                             <p>Quantity: {item.quantity}</p>
                             <p>Total: {formatCurrency(item.total)}</p>
                           </div>
