@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/auth";
 import { loginUser } from "../services/loginService";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -93,6 +94,9 @@ function Login() {
           <button type="submit" className="btn btn-primary ">
             Login
           </button>
+          <p style={{ marginTop: "10px", textAlign: "center" }}>
+            New to E-MART? <Link to="/register">register</Link>
+          </p>
         </form>
       </div>
     </>
